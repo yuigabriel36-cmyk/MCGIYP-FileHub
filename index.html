@@ -30,21 +30,8 @@ body {
   min-height: 100vh;
 }
 
-/* Watermark Background */
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('YOUR_IMAGE_URL_HERE');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  opacity: 0.15;
-  z-index: -1;
-  pointer-events: none;
+  background: var(--bg);
 }
 
 header.header {
@@ -362,8 +349,8 @@ footer {
             <a href="https://drive.google.com/drive/folders/YOUR_FONTS_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> Fonts
             </a>
-            <a href="https://drive.google.com/drive/folders/YOUR_COLORS_LINK" target="_blank" class="file-link">
-              <span class="file-icon">📁</span> Colors
+            <a href="swatches.html" class="file-link">
+             <span class="file-icon">🎨</span> Color Swatches
             </a>
 
             <!-- CHECKLIST -->
