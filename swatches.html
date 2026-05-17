@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Swatches - MCGI Youth Palawan</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FDFD;
+  --text: #3A6B7A;
+  --accent-yellow: #FFD60A;
+  --accent-orange: #FF8C00;
+  --border: #E5E5E5;
+  --hover-bg: #FFF5E0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.back-link {
+  padding: 10px 20px;
+  background: var(--accent-orange);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  background: #e67e00;
+}
+
+.panel-controls {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panel-controls input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn {
+  padding: 12px 20px;
+  background: var(--accent-orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn:hover {
+  background: #e67e00;
+}
+
+.btn-danger {
+  background: #ff4d4d;
+}
+
+.btn-danger:hover {
+  background: #e03e3e;
+}
+
+/* Collapsible Panel */
+.swatch-panel {
+  background: var(--hover-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 16px 20px;
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.panel-header:hover {
+  background: var(--hover-bg);
+}
+
+.panel-header.arrow {
+  transition: transform 0.3s ease;
+}
+
+.panel-header.active.arrow {
+  transform: rotate(90deg);
+}
+
+.panel-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.panel-body.open {
+  max-height: 2000px;
+}
+
+.panel-content {
+  padding: 20px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.color-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.color-preview {
+  height: 60px;
+  width: 100%;
+}
+
+.color-info {
+  padding: 12px;
+}
+
+.color-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.color-hex {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.copy-btn {
+  width: 100%;
+  padding: 8px;
+  background: var(--accent-orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.copy-btn:hover {
+  background: #e67e00;
+}
+
+.copy-btn.copied {
+  background: #28a745;
+}
+
+.editable-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.editable-row input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.add-color-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent-yellow);
+  border: 1px dashed var(--accent-orange);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+ .color-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Color Swatches</h1>
+    <a href="index.html" class="back-link">← Back to File Hub</a>
+  </header>
+
+  <div class="panel-controls">
+    <input type="text" id="newPanelName" placeholder="New panel name...">
+    <button class="btn" onclick="addPanel()">+ Add Swatch Panel</button>
+  </div>
+
+  <div id="panelsContainer"></div>
+</div>
+
+<script>
+// Initial data
+const defaultPanels = [
+  {
+    id: 'main-swatch',
+    name: 'Main Swatch',
+    editable: false,
+    colors: [
+      {name: 'Dark Blue', hex: '#0C4F84'},
+      {name: 'Bright Blue', hex: '#0c8BEF'},
+      {name: 'Orange', hex: '#EA9A22'},
+      {name: 'Yellow', hex: '#EFCA30'},
+      {name: 'Light Yellow', hex: '#FBE258'},
+      {name: 'Gold', hex: '#EDB651'},
+      {name: 'Coral', hex: '#EC6A3B'},
+      {name: 'Purple', hex: '#B74B9B'},
+      {name: 'Black', hex: '#000'},
+      {name: 'Light Gray', hex: '#F1F1F1'},
+      {name: 'Blue Gray', hex: '#3B5DB0'},
+      {name: 'Periwinkle', hex: '#647BBB'},
+      {name: 'Pink', hex: '#D75B98'}
+    ]
+  },
+  {
+    id: '7d-mcgiyc-2026',
+    name: '7D-MCGIYC 2026 Color Swatch',
+    editable: false,
+    colors: [
+      {name: 'Color 1', hex: '#00243E'},
+      {name: 'Color 2', hex: '#004F88'},
+      {name: 'Color 3', hex: '#015696'},
+      {name: 'Color 4', hex: '#038DE6'},
+      {name: 'Color 5', hex: '#006BFF'},
+      {name: 'Color 6', hex: '#703D12'},
+      {name: 'Color 7', hex: '#98782D'},
+      {name: 'Color 8', hex: '#A38525'},
+      {name: 'Color 9', hex: '#D3AB2F'},
+      {name: 'Color 10', hex: '#FAD804'}
+    ]
+  }
+];
+
+let panels = JSON.parse(localStorage.getItem('swatchPanels') || JSON.stringify(defaultPanels));
+
+function savePanels() {
+  localStorage.setItem('swatchPanels', JSON.stringify(panels));
+}
+
+function renderPanels() {
+  const container = document.getElementById('panelsContainer');
+  container.innerHTML = '';
+
+  panels.forEach(panel => {
+    const panelEl = document.createElement('div');
+    panelEl.className = 'swatch-panel';
+
+    const canDelete = panel.editable;
+
+    panelEl.innerHTML = `
+      <div class="panel-header" onclick="togglePanel('${panel.id}')">
+        <span>${panel.name}</span>
+        <div style="display:flex; gap:8px; align-items:center;">
+          ${canDelete? `<button class="btn btn-danger" onclick="event.stopPropagation(); deletePanel('${panel.id}')">Delete</button>` : ''}
+          <span class="arrow">▶</span>
+        </div>
+      </div>
+      <div class="panel-body" id="body-${panel.id}">
+        <div class="panel-content">
+          <div class="color-grid" id="grid-${panel.id}"></div>
+          ${panel.editable? `
+            <div id="edit-${panel.id}"></div>
+            <button class="add-color-btn" onclick="addColorRow('${panel.id}')">+ Add Color</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
+    container.appendChild(panelEl);
+    renderColors(panel.id);
+    if (panel.editable) renderEditRows(panel.id);
+  });
+}
+
+function renderColors(panelId) {
+  const panel = panels.find(p => p.id === panelId);
+  const grid = document.getElementById(`grid-${panelId}`);
+  grid.innerHTML = panel.colors.map(color => `
+    <div class="color-card">
+      <div class="color-preview" style="background:${color.hex}"></div>
+      <div class="color-info">
+        <div class="color-name">${color.name}</div>
+        <div class="color-hex">${color.hex}</div>
+      </div>
+      <button class="copy-btn" onclick="copyHex('${color.hex}', this)">Copy Hex</button>
+    </div>
+  `).join('');
+}
+
+function renderEditRows(panelId) {
+  const panel = panels.find(p => p.id === panelId);
+  const editDiv = document.getElementById(`edit-${panelId}`);
+  editDiv.innerHTML = panel.colors.map((color, i) => `
+    <div class="editable-row">
+      <input type="text" value="${color.name}" placeholder="Color name"
+        onchange="updateColor('${panelId}', ${i}, 'name', this.value)">
+      <input type="text" value="${color.hex}" placeholder="#HEX"
+        onchange="updateColor('${panelId}', ${i}, 'hex', this.value)">
+      <button class="btn btn-danger" onclick="removeColor('${panelId}', ${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function togglePanel(id) {
+  const body = document.getElementById(`body-${id}`);
+  const header = body.previousElementSibling;
+  body.classList.toggle('open');
+  header.classList.toggle('active');
+}
+
+function addPanel() {
+  const nameInput = document.getElementById('newPanelName');
+  const name = nameInput.value.trim();
+  if (!name) return alert('Enter a panel name');
+
+  const id = 'panel-' + Date.now();
+  panels.push({id, name, editable: true, colors: []});
+  nameInput.value = '';
+  savePanels();
+  renderPanels();
+}
+
+function deletePanel(id) {
+  if (!confirm('Delete this panel?')) return;
+  panels = panels.filter(p => p.id!== id);
+  savePanels();
+  renderPanels();
+}
+
+function addColorRow(panelId) {
+  const panel = panels.find(p => p.id === panelId);
+  panel.colors.push({name: 'New Color', hex: '#000'});
+  savePanels();
+  renderColors(panelId);
+  renderEditRows(panelId);
+}
+
+function removeColor(panelId, index) {
+  const panel = panels.find(p => p.id === panelId);
+  panel.colors.splice(index, 1);
+  savePanels();
+  renderColors(panelId);
+  renderEditRows(panelId);
+}
+
+function updateColor(panelId, index, field, value) {
+  const panel = panels.find(p => p.id === panelId);
+  panel.colors[index][field] = value;
+  savePanels();
+  renderColors(panelId);
+}
+
+function copyHex(hex, btn) {
+  navigator.clipboard.writeText(hex).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy Hex';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+
+// Init
+renderPanels();
+
+// Open first panel by default
+setTimeout(() => {
+  const firstBody = document.querySelector('.panel-body');
+  const firstHeader = document.querySelector('.panel-header');
+  if (firstBody) {
+    firstBody.classList.add('open');
+    firstHeader.classList.add('active');
+  }
+}, 100);
+</script>
+</body>
+</html>
