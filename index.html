@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f1f1f1;
+  --bg: #F1F1F1;
   --text: #3A6B7A;
   --accent-yellow: #FFD60A;
   --accent-orange: #FF8C00;
@@ -30,15 +30,78 @@ body {
   min-height: 100vh;
 }
 
+/* WELCOME ANIMATION - SOLID POP */
+#welcomeOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-orange);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.8s forwards;
+}
+
+.welcome-text {
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  animation: popBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+}
+
+.welcome-sub {
+  font-size: 1.2rem;
+  color: white;
+  margin-top: 12px;
+  opacity: 0;
+  animation: fadeInSub 0.5s ease 0.6s forwards;
+}
+
+@keyframes popBounce {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInSub {
+  to { opacity: 0.9; }
+}
+
+@keyframes slideUp {
+  to { 
+    transform: translateY(-100%); 
+    visibility: hidden;
+  }
+}
+
+/* Watermark Background */
 body::before {
-  background: var(--bg);
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('YOUR_IMAGE_URL_HERE');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
 }
 
 header.header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16px 32px;
-  background: rgba(253, 253, 253, 0.8);
+  background: rgba(241, 241, 241, 0.9);
   border-bottom: 2px solid var(--border);
   position: sticky;
   top: 0;
@@ -63,6 +126,29 @@ header.header {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--text);
+}
+
+/* ADMIN BUTTON */
+.admin-btn {
+  padding: 8px 16px;
+  background: var(--accent-orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.admin-btn:hover {
+  background: #e67e00;
+  transform: translateY(-1px);
+}
+
+.admin-btn.signed-in {
+  background: #28a745;
 }
 
 @keyframes slideDown {
@@ -136,7 +222,7 @@ input::placeholder {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  background: var(--bg);
+  background: white;
   border: 2px solid var(--border);
   border-radius: 12px;
   cursor: pointer;
@@ -162,7 +248,7 @@ input::placeholder {
   font-size: 1.2rem;
 }
 
-.folder-header.active.folder-icon {
+.folder-header.active .folder-icon {
   transform: rotate(90deg);
 }
 
@@ -175,7 +261,7 @@ input::placeholder {
 }
 
 .folder-content.open {
-  max-height: 3000px;
+  max-height: 2000px;
 }
 
 .file-link {
@@ -183,7 +269,7 @@ input::placeholder {
   align-items: center;
   padding: 12px 16px;
   margin: 6px 0;
-  background: var(--bg);
+  background: white;
   border: 1px solid var(--border);
   border-radius: 8px;
   text-decoration: none;
@@ -201,84 +287,6 @@ input::placeholder {
 }
 
 .file-icon { margin-right: 10px; font-size: 1.1rem; }
-
-/* CHECKLIST STYLES */
-.checklist {
-  margin-top: 12px;
-  padding: 16px;
-  background: var(--hover-bg);
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-.checklist h4 {
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  opacity: 0.8;
-}
-
-.checklist-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.checklist-items li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 0.9rem;
-}
-
-.checklist-items input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--accent-orange);
-  cursor: pointer;
-}
-
-.checklist-items li.checked span {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.checklist-items button {
-  margin-left: auto;
-  background: none;
-  border: none;
-  color: #ff4d4d;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0 4px;
-}
-
-.checklist-add {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.checklist-add input {
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
-}
-
-.checklist-add button {
-  padding: 6px 12px;
-  background: var(--accent-orange);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
-/* END CHECKLIST STYLES */
 
 .info-box {
   margin-top: 48px;
@@ -304,20 +312,88 @@ footer {
   opacity: 0.7;
 }
 
+/* ADMIN MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-bottom: 16px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.modal-content button {
+  padding: 12px 24px;
+  margin: 8px 4px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.modal-submit {
+  background: var(--accent-orange);
+  color: white;
+}
+
+.modal-cancel {
+  background: var(--border);
+  color: var(--text);
+}
+
 @media (max-width: 768px) {
   h1 { font-size: 1.4rem; }
- .folder-content { margin-left: 16px; }
+  .folder-content { margin-left: 16px; }
   header.header { padding: 12px 20px; }
+  .welcome-text { font-size: 2.5rem; }
 }
 </style>
 </head>
 <body>
+
+<!-- WELCOME ANIMATION -->
+<div id="welcomeOverlay">
+  <div class="welcome-text">Hi there!</div>
+  <div class="welcome-sub">Welcome to File Hub</div>
+</div>
 
 <header class="header">
   <div class="logo">
     <img src="https://i.imgur.com/pc2atD7.png" alt="Logo">
     <span>File Hub</span>
   </div>
+  <button class="admin-btn" id="adminBtn" onclick="handleAdminClick()">Admin Sign In</button>
 </header>
 
 <div class="container">
@@ -329,6 +405,17 @@ footer {
   </div>
 
   <div class="folder-tree" id="folderTree">
+    
+    <!-- MY DRIVE - ONLY VISIBLE TO ADMIN -->
+    <div class="folder" id="myDriveFolder" style="display:none;">
+      <div class="folder-header">
+        <span class="folder-icon">▶</span>
+        <span>🔒 My Drive</span>
+      </div>
+      <div class="folder-content">
+        <p style="padding:16px;opacity:0.7;">Add your private subfolders here later.</p>
+      </div>
+    </div>
 
     <div class="folder">
       <div class="folder-header">
@@ -336,36 +423,23 @@ footer {
         <span>Stills & Reference Materials</span>
       </div>
       <div class="folder-content">
-
         <div class="folder">
           <div class="folder-header">
             <span class="folder-icon">▶</span>
             <span>Brand Identity</span>
           </div>
           <div class="folder-content">
-            <a href="https://drive.google.com/drive/folders/1FQqDhlVngFF-LXGNxtXK2B3SsWYhnp4d" target="_blank" class="file-link">
+            <a href="https://drive.google.com/drive/folders/YOUR_LOGOS_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> Logos
             </a>
-            <a href="https://drive.google.com/drive/folders/1FRe2LJRG0p5Jv3IMFMF0ZoPrknAwticP" target="_blank" class="file-link">
+            <a href="https://drive.google.com/drive/folders/YOUR_FONTS_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> Fonts
             </a>
             <a href="swatches.html" class="file-link">
-             <span class="file-icon">🎨</span> Color Swatches
+              <span class="file-icon">🎨</span> Color Swatches
             </a>
-
-            <!-- CHECKLIST -->
-            <div class="checklist" data-folder="brand-identity">
-              <h4>Checklist</h4>
-              <ul class="checklist-items"></ul>
-              <div class="checklist-add">
-                <input type="text" placeholder="Add item...">
-                <button>Add</button>
-              </div>
-            </div>
-            <!-- END CHECKLIST -->
           </div>
         </div>
-
         <div class="folder">
           <div class="folder-header">
             <span class="folder-icon">▶</span>
@@ -375,49 +449,25 @@ footer {
             <a href="https://drive.google.com/drive/folders/YOUR_DESIGN_STILLS_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> Any designs for future upload
             </a>
-
-            <!-- CHECKLIST -->
-            <div class="checklist" data-folder="design-stills">
-              <h4>Checklist</h4>
-              <ul class="checklist-items"></ul>
-              <div class="checklist-add">
-                <input type="text" placeholder="Add item...">
-                <button>Add</button>
-              </div>
-            </div>
-            <!-- END CHECKLIST -->
           </div>
         </div>
-
         <div class="folder">
           <div class="folder-header">
             <span class="folder-icon">▶</span>
             <span>Yearly Design Compilations</span>
           </div>
           <div class="folder-content">
-            <a href="https://drive.google.com/drive/folders/1FSNgh8h0uzymScZbBAUS6Cl2ZgKTV_kG" target="_blank" class="file-link">
+            <a href="https://drive.google.com/drive/folders/YOUR_2025_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> 2025
             </a>
-            <a href="https://drive.google.com/drive/folders/1FTj7DpnE5Dd-crCmKNq4ejHXD8WYECYB" target="_blank" class="file-link">
+            <a href="https://drive.google.com/drive/folders/YOUR_2026_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> 2026
             </a>
             <a href="https://drive.google.com/drive/folders/YOUR_2027_LINK" target="_blank" class="file-link">
               <span class="file-icon">📁</span> 2027
             </a>
-
-            <!-- CHECKLIST -->
-            <div class="checklist" data-folder="yearly-compilations">
-              <h4>Checklist</h4>
-              <ul class="checklist-items"></ul>
-              <div class="checklist-add">
-                <input type="text" placeholder="Add item...">
-                <button>Add</button>
-              </div>
-            </div>
-            <!-- END CHECKLIST -->
           </div>
         </div>
-
       </div>
     </div>
 
@@ -427,31 +477,18 @@ footer {
         <span>Design Files</span>
       </div>
       <div class="folder-content">
-        <a href="https://drive.google.com/drive/folders/1FIgmCzcfFxQXr_ay8PHHwxIVu-38-U3N" target="_blank" class="file-link">
+        <a href="https://drive.google.com/drive/folders/YOUR_DRAFTS_LINK" target="_blank" class="file-link">
           <span class="file-icon">📁</span> Draft Projects
         </a>
-        <a href="https://drive.google.com/drive/folders/1FLLfhaqtz5WFy3WAJpI5qkFhD2NVwmuu" target="_blank" class="file-link">
+        <a href="https://drive.google.com/drive/folders/YOUR_TEMPLATES_LINK" target="_blank" class="file-link">
           <span class="file-icon">📁</span> Templates
         </a>
-
-        <!-- CHECKLIST -->
-        <div class="checklist" data-folder="design-files">
-          <h4>Checklist</h4>
-          <ul class="checklist-items"></ul>
-          <div class="checklist-add">
-            <input type="text" placeholder="Add item...">
-            <button>Add</button>
-          </div>
-        </div>
-        <!-- END CHECKLIST -->
       </div>
     </div>
 
-  </div>
-
   <div class="info-box">
     <h3>How to use</h3>
-    <p>Click any folder to expand. Click a subfolder to open the Google Drive link directly. For editors: make sure your google drive account have access to the folder/file.</p>
+    <p>Click any folder to expand. Click a subfolder to open the Google Drive link directly. For editors: make sure your Drive folders are set to "Anyone with the link can view" or "Editor" based on access needs.</p>
   </div>
 </div>
 
@@ -459,14 +496,98 @@ footer {
   <p>© 2026 MCGI Youth Palawan | Built for Provincial, City/Municipal Editors & Media-Tech Teams</p>
 </footer>
 
+<!-- ADMIN MODAL -->
+<div class="modal" id="adminModal">
+  <div class="modal-content">
+    <h3>Admin Sign In</h3>
+    <p style="margin-bottom:16px;opacity:0.7;font-size:0.9rem;">Enter admin password to access My Drive</p>
+    <input type="password" id="adminPassword" placeholder="Password">
+    <button class="modal-submit" onclick="checkAdmin()">Sign In</button>
+    <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+    <p id="adminError" style="color:#ff4d4d;margin-top:8px;font-size:0.85rem;display:none;">Incorrect password</p>
+  </div>
+</div>
+
 <script>
+// ADMIN PASSWORD - CHANGE THIS
+const ADMIN_PASSWORD = 'congratsnoobcoder';
+
+// Play tone on welcome
+function playWelcomeTone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 523.25; // C5 note
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
+
+// Check if already admin
+const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
+
+// Remove welcome animation after 2.4s or if already visited
+if (sessionStorage.getItem('welcomed')) {
+  document.getElementById('welcomeOverlay').style.display = 'none';
+} else {
+  sessionStorage.setItem('welcomed', 'true');
+  setTimeout(playWelcomeTone, 200);
+  setTimeout(() => {
+    document.getElementById('welcomeOverlay').style.display = 'none';
+  }, 2400);
+}
+
+// Show My Drive if admin
+if (isAdmin) {
+  document.getElementById('myDriveFolder').style.display = 'block';
+  document.getElementById('adminBtn').textContent = 'Admin: Sign Out';
+  document.getElementById('adminBtn').classList.add('signed-in');
+}
+
+function handleAdminClick() {
+  if (isAdmin) {
+    localStorage.removeItem('mcgiAdmin');
+    location.reload();
+  } else {
+    document.getElementById('adminModal').classList.add('open');
+    document.getElementById('adminPassword').focus();
+  }
+}
+
+function closeModal() {
+  document.getElementById('adminModal').classList.remove('open');
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('adminError').style.display = 'none';
+}
+
+function checkAdmin() {
+  const pass = document.getElementById('adminPassword').value;
+  if (pass === ADMIN_PASSWORD) {
+    localStorage.setItem('mcgiAdmin', 'true');
+    location.reload();
+  } else {
+    document.getElementById('adminError').style.display = 'block';
+  }
+}
+
+// Enter key to submit
+document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') checkAdmin();
+});
+
 // Folder toggle
 document.querySelectorAll('.folder-header').forEach(header => {
   header.addEventListener('click', () => {
     const content = header.nextElementSibling;
     const isOpen = content.classList.contains('open');
     header.parentElement.parentElement.querySelectorAll('.folder-content.open').forEach(openContent => {
-      if (openContent!== content) {
+      if (openContent !== content) {
         openContent.classList.remove('open');
         openContent.previousElementSibling.classList.remove('active');
       }
@@ -487,82 +608,13 @@ searchInput.addEventListener('input', (e) => {
      .map(link => link.textContent.toLowerCase())
      .join(' ');
     const matches = headerText.includes(searchTerm) || linkTexts.includes(searchTerm);
-    folder.style.display = matches || searchTerm === ''? 'block' : 'none';
-    if (matches && searchTerm!== '') {
+    folder.style.display = matches || searchTerm === '' ? 'block' : 'none';
+    if (matches && searchTerm !== '') {
       folder.querySelector('.folder-content')?.classList.add('open');
       folder.querySelector('.folder-header')?.classList.add('active');
     }
   });
 });
-
-// Checklist logic
-function initChecklists() {
-  document.querySelectorAll('.checklist').forEach(checklist => {
-    const folderId = checklist.dataset.folder;
-    const listEl = checklist.querySelector('.checklist-items');
-    const input = checklist.querySelector('input');
-    const addBtn = checklist.querySelector('button');
-
-    let items = JSON.parse(localStorage.getItem('checklist_' + folderId) || '[]');
-
-    function save() {
-      localStorage.setItem('checklist_' + folderId, JSON.stringify(items));
-    }
-
-    function render() {
-      listEl.innerHTML = '';
-      if (items.length === 0) {
-        listEl.innerHTML = '<li style="opacity:0.6; font-size:0.85rem;">No items yet</li>';
-        return;
-      }
-      items.forEach((item, i) => {
-        const li = document.createElement('li');
-        li.className = item.checked? 'checked' : '';
-        li.innerHTML = `
-          <input type="checkbox" ${item.checked? 'checked' : ''} data-i="${i}">
-          <span>${item.text}</span>
-          <button data-i="${i}">×</button>
-        `;
-        listEl.appendChild(li);
-      });
-    }
-
-    addBtn.addEventListener('click', () => {
-      const text = input.value.trim();
-      if (!text) return;
-      items.push({ text, checked: false });
-      input.value = '';
-      save();
-      render();
-    });
-
-    input.addEventListener('keypress', e => {
-      if (e.key === 'Enter') addBtn.click();
-    });
-
-    listEl.addEventListener('change', e => {
-      if (e.target.type === 'checkbox') {
-        const i = e.target.dataset.i;
-        items[i].checked = e.target.checked;
-        save();
-        render();
-      }
-    });
-
-    listEl.addEventListener('click', e => {
-      if (e.target.tagName === 'BUTTON') {
-        const i = e.target.dataset.i;
-        items.splice(i, 1);
-        save();
-        render();
-      }
-    });
-
-    render();
-  });
-}
-
-document.addEventListener('DOMContentLoaded', initChecklists);
 </script>
 </body>
 </html>
