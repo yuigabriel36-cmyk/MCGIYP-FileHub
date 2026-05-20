@@ -10,15 +10,27 @@
 <style>
 :root {
   --bg: #F1F1F1;
+  --card-bg: #FFFFFF;
   --text: #3A6B7A;
   --accent-yellow: #FFD60A;
   --accent-orange: #FF8C00;
   --border: #E5E5E5;
   --hover-bg: #FFF5E0;
   --header-height: 72px;
+  --text-scale: 1;
+}
+
+[data-theme="dark"] {
+  --bg: #1A1A1A;
+  --card-bg: #2A2A2A;
+  --text: #E0E0E0;
+  --border: #404040;
+  --hover-bg: #333333;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: calc(16px * var(--text-scale)); }
 
 body {
   font-family: 'Montserrat', sans-serif;
@@ -28,6 +40,7 @@ body {
   font-weight: 400;
   position: relative;
   min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* WELCOME ANIMATION - SOLID POP */
@@ -67,17 +80,8 @@ body {
   60% { transform: scale(1.15); }
   100% { transform: scale(1); opacity: 1; }
 }
-
-@keyframes fadeInSub {
-  to { opacity: 0.9; }
-}
-
-@keyframes slideUp {
-  to { 
-    transform: translateY(-100%); 
-    visibility: hidden;
-  }
-}
+@keyframes fadeInSub { to { opacity: 0.9; } }
+@keyframes slideUp { to { transform: translateY(-100%); visibility: hidden; } }
 
 /* Watermark Background */
 body::before {
@@ -101,7 +105,7 @@ header.header {
   align-items: center;
   justify-content: space-between;
   padding: 16px 32px;
-  background: rgba(241, 241, 241, 0.9);
+  background: var(--bg);
   border-bottom: 2px solid var(--border);
   position: sticky;
   top: 0;
@@ -128,9 +132,154 @@ header.header {
   color: var(--text);
 }
 
-/* ADMIN BUTTON */
-.admin-btn {
+/* SETTINGS TAB */
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
   padding: 8px 16px;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent-orange);
+}
+
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  min-width: 280px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  display: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.settings-dropdown.open {
+  display: block;
+  animation: dropdownIn 0.2s ease;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.settings-row:last-child {
+  margin-bottom: 0;
+}
+
+.settings-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  background: var(--border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: var(--accent-orange);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(22px);
+}
+
+.text-size-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.text-size-control input[type="range"] {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.text-size-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-orange);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.text-size-value {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.admin-btn, .about-btn {
+  width: 100%;
+  padding: 10px;
   background: var(--accent-orange);
   color: white;
   border: none;
@@ -139,12 +288,11 @@ header.header {
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
-  transition: all 0.2s ease;
+  margin-bottom: 8px;
 }
 
-.admin-btn:hover {
+.admin-btn:hover, .about-btn:hover {
   background: #e67e00;
-  transform: translateY(-1px);
 }
 
 .admin-btn.signed-in {
@@ -198,7 +346,7 @@ input[type="text"] {
   background: var(--accent-yellow);
   border: 2px solid transparent;
   border-radius: 12px;
-  color: var(--text);
+  color: #3A6B7A;
   transition: all 0.3s ease;
 }
 
@@ -210,7 +358,7 @@ input[type="text"]:focus {
 }
 
 input::placeholder {
-  color: var(--text);
+  color: #3A6B7A;
   opacity: 0.6;
   font-weight: 400;
 }
@@ -222,7 +370,7 @@ input::placeholder {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  background: white;
+  background: var(--card-bg);
   border: 2px solid var(--border);
   border-radius: 12px;
   cursor: pointer;
@@ -269,7 +417,7 @@ input::placeholder {
   align-items: center;
   padding: 12px 16px;
   margin: 6px 0;
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   text-decoration: none;
@@ -331,7 +479,7 @@ footer {
 }
 
 .modal-content {
-  background: white;
+  background: var(--card-bg);
   padding: 32px;
   border-radius: 12px;
   max-width: 400px;
@@ -341,6 +489,7 @@ footer {
 
 .modal-content h3 {
   margin-bottom: 16px;
+  color: var(--text);
 }
 
 .modal-content input {
@@ -350,6 +499,8 @@ footer {
   border: 2px solid var(--border);
   border-radius: 8px;
   font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .modal-content button {
@@ -377,6 +528,7 @@ footer {
   .folder-content { margin-left: 16px; }
   header.header { padding: 12px 20px; }
   .welcome-text { font-size: 2.5rem; }
+  .settings-dropdown { right: -16px; }
 }
 </style>
 </head>
@@ -393,7 +545,35 @@ footer {
     <img src="https://i.imgur.com/pc2atD7.png" alt="Logo">
     <span>File Hub</span>
   </div>
-  <button class="admin-btn" id="adminBtn" onclick="handleAdminClick()">Admin Sign In</button>
+  <div class="settings-wrapper">
+    <button class="settings-btn" id="settingsBtn">
+      <span>⚙️</span>
+      <span>Settings</span>
+    </button>
+    <div class="settings-dropdown" id="settingsDropdown">
+      <div class="settings-section">
+        <h4>Admin</h4>
+        <button class="admin-btn" id="adminBtn" onclick="handleAdminClick()">Admin Sign In</button>
+      </div>
+      <div class="settings-section">
+        <h4>Appearance</h4>
+        <div class="settings-row">
+          <span class="settings-label">Dark Mode</span>
+          <div class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()"></div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">Text Size</span>
+          <div class="text-size-control">
+            <input type="range" id="textSizeSlider" min="1" max="10" value="5" oninput="changeTextSize(this.value)">
+            <span class="text-size-value" id="textSizeValue">5</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <button class="about-btn" onclick="window.location.href='about.html'">About This Page</button>
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="container">
@@ -450,7 +630,6 @@ footer {
               <span class="file-icon">📁</span> Any designs for future upload
             </a>
           </div>
-        </div>
         <div class="folder">
           <div class="folder-header">
             <span class="folder-icon">▶</span>
@@ -509,8 +688,31 @@ footer {
 </div>
 
 <script>
-// ADMIN PASSWORD - CHANGE THIS
-const ADMIN_PASSWORD = 'congratsnoobcoder';
+// CONFIG
+const ADMIN_PASSWORD = 'mcgiyouth2026';
+
+// APPLY SAVED SETTINGS ON LOAD
+function applySettings() {
+  // Dark mode
+  const isDark = localStorage.getItem('theme') === 'dark';
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('darkModeToggle').classList.add('active');
+  }
+  
+  // Text size
+  const textSize = localStorage.getItem('textSize') || '5';
+  document.documentElement.style.setProperty('--text-scale', textSize / 5);
+  document.getElementById('textSizeSlider').value = textSize;
+  document.getElementById('textSizeValue').textContent = textSize;
+  
+  // Admin status
+  const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
+  if (isAdmin) {
+    document.getElementById('myDriveFolder').style.display = 'block';
+    document.getElementById('adminBtn').textContent = 'Admin: Sign Out';
+  }
+}
 
 // Play tone on welcome
 function playWelcomeTone() {
@@ -520,17 +722,14 @@ function playWelcomeTone() {
     const gain = ctx.createGain();
     osc.connect(gain);
     gain.connect(ctx.destination);
-    osc.frequency.value = 523.25; // C5 note
+    osc.frequency.value = 523.25;
     gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
     osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.3);
+    osc.stop(ctx.currentTime + 0.25);
   } catch(e) {}
 }
-
-// Check if already admin
-const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
 
 // Remove welcome animation after 2.4s or if already visited
 if (sessionStorage.getItem('welcomed')) {
@@ -543,14 +742,43 @@ if (sessionStorage.getItem('welcomed')) {
   }, 2400);
 }
 
-// Show My Drive if admin
-if (isAdmin) {
-  document.getElementById('myDriveFolder').style.display = 'block';
-  document.getElementById('adminBtn').textContent = 'Admin: Sign Out';
-  document.getElementById('adminBtn').classList.add('signed-in');
+// Settings dropdown toggle
+document.getElementById('settingsBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('settingsDropdown').classList.toggle('open');
+});
+
+document.addEventListener('click', () => {
+  document.getElementById('settingsDropdown').classList.remove('open');
+});
+
+document.getElementById('settingsDropdown').addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+// Dark mode toggle
+function toggleDarkMode() {
+  const toggle = document.getElementById('darkModeToggle');
+  const isActive = toggle.classList.toggle('active');
+  if (isActive) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  }
 }
 
+// Text size change
+function changeTextSize(value) {
+  document.documentElement.style.setProperty('--text-scale', value / 5);
+  document.getElementById('textSizeValue').textContent = value;
+  localStorage.setItem('textSize', value);
+}
+
+// Admin functions
 function handleAdminClick() {
+  const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
   if (isAdmin) {
     localStorage.removeItem('mcgiAdmin');
     location.reload();
@@ -576,7 +804,6 @@ function checkAdmin() {
   }
 }
 
-// Enter key to submit
 document.getElementById('adminPassword').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') checkAdmin();
 });
@@ -615,6 +842,9 @@ searchInput.addEventListener('input', (e) => {
     }
   });
 });
+
+// Init
+applySettings();
 </script>
 </body>
 </html>
