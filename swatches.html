@@ -6,13 +6,49 @@
 <title>Color Swatches - MCGI Youth Palawan</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+
+<script>
+// Apply saved settings
+const isDark = localStorage.getItem('theme') === 'dark';
+if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+const textSize = localStorage.getItem('textSize') || '5';
+document.documentElement.style.setProperty('--text-scale', textSize / 5);
+</script>
+
+<script>
+// Apply saved settings
+const isDark = localStorage.getItem('theme') === 'dark';
+if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+const textSize = localStorage.getItem('textSize') || '5';
+document.documentElement.style.setProperty('--text-scale', textSize / 5);
+</script>
+
+:root {
+  --bg: #F1F1F1;
+  --card-bg: #FFFFFF;
+  --text: #3A6B7A;
+  --text-scale: 1;
+}
+[data-theme="dark"] {
+  --bg: #1A1A1A;
+  --card-bg: #2A2A2A;
+  --text: #E0E0E0;
+  --border: #404040;
+  --hover-bg: #333333;
+}
+html { font-size: calc(16px * var(--text-scale)); }
+
 :root {
   --bg: #f1f1f1;
+  --card-bg: #FFFFFF;
   --text: #3A6B7A;
   --accent-yellow: #FFD60A;
   --accent-orange: #FF8C00;
   --border: #E5E5E5;
   --hover-bg: #FFF5E0;
+  --text-scale: 1; 
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
