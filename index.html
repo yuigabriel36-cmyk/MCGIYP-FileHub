@@ -582,6 +582,7 @@ footer {
 
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search folders and files...">
+    <div id="searchResults" style="margin-top:16px;display:none;"></div>
   </div>
 
   <div class="folder-tree" id="folderTree">
@@ -711,6 +712,7 @@ function applySettings() {
   if (isAdmin) {
     document.getElementById('myDriveFolder').style.display = 'block';
     document.getElementById('adminBtn').textContent = 'Admin: Sign Out';
+    document.getElementById('adminBtn').classList.add('signed-in');
   }
 }
 
@@ -824,23 +826,83 @@ document.querySelectorAll('.folder-header').forEach(header => {
   });
 });
 
-// Search
+// Cross-page search index
+const pageIndex = [
+  {
+    page: 'swatches.html',
+    title: 'Color Swatches',
+    keywords: 'color swatches main swatch 7d mcgiyc 2026 hex #00243E #004F88 #015696 #038DE6 #006BFF #703D12 #98782D #A38525 #D3AB2F #FAD804 dark blue bright blue orange yellow gold coral purple black gray pink'
+  },
+  {
+    page: 'about.html',
+    title: 'About This Page',
+    keywords: 'about purpose editor materials monitoring drafts projects feedback support developer google drive security'
+  }
+];
+
+// Search with admin check + cross-page
 const searchInput = document.getElementById('searchInput');
+const searchResultsDiv = document.getElementById('searchResults');
+const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
+
 searchInput.addEventListener('input', (e) => {
   const searchTerm = e.target.value.toLowerCase();
   const allFolders = document.querySelectorAll('.folder');
+  let hasLocalResults = false;
+  
+  // Local folder search
   allFolders.forEach(folder => {
+    // Skip admin-only folders if not admin - THIS IS THE FIX
+    if (folder.id === 'myDriveFolder' && !isAdmin) {
+      folder.style.display = 'none';
+      return;
+    }
+    
     const headerText = folder.querySelector('.folder-header span:last-child').textContent.toLowerCase();
     const linkTexts = Array.from(folder.querySelectorAll('.file-link'))
      .map(link => link.textContent.toLowerCase())
      .join(' ');
     const matches = headerText.includes(searchTerm) || linkTexts.includes(searchTerm);
     folder.style.display = matches || searchTerm === '' ? 'block' : 'none';
+    if (matches) hasLocalResults = true;
     if (matches && searchTerm !== '') {
       folder.querySelector('.folder-content')?.classList.add('open');
       folder.querySelector('.folder-header')?.classList.add('active');
     }
   });
+  
+  // Cross-page search
+  if (searchTerm.length > 1) {
+    const pageMatches = pageIndex.filter(p => 
+      p.title.toLowerCase().includes(searchTerm) || 
+      p.keywords.toLowerCase().includes(searchTerm)
+    );
+    
+    if (pageMatches.length > 0) {
+      searchResultsDiv.style.display = 'block';
+      searchResultsDiv.innerHTML = `
+        <div style="padding:16px;background:var(--card-bg);border:2px solid var(--border);border-radius:12px;">
+          <div style="font-weight:700;margin-bottom:12px;font-size:0.9rem;opacity:0.7;">RESULTS FROM OTHER PAGES</div>
+          ${pageMatches.map(p => `
+            <a href="${p.page}" style="display:block;padding:12px;margin:6px 0;background:var(--bg);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-weight:600;">
+              📄 ${p.title}
+            </a>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      searchResultsDiv.style.display = 'none';
+    }
+  } else {
+    searchResultsDiv.style.display = 'none';
+  }
+  
+  // Hide folder tree if no local results but has page results
+  if (!hasLocalResults && searchTerm.length > 1 && searchResultsDiv.style.display === 'block') {
+    document.getElementById('folderTree').style.display = 'none';
+  } else {
+    document.getElementById('folderTree').style.display = 'block';
+  }
 });
 
 // Init
