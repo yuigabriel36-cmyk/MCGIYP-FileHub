@@ -43,7 +43,6 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* WELCOME ANIMATION - SOLID POP */
 #welcomeOverlay {
   position: fixed;
   top: 0;
@@ -83,7 +82,120 @@ body {
 @keyframes fadeInSub { to { opacity: 0.9; } }
 @keyframes slideUp { to { transform: translateY(-100%); visibility: hidden; } }
 
-/* Watermark Background */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-top: var(--header-height);
+  overflow: hidden;
+  background: #000;
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-slide::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  color: white;
+  z-index: 2;
+  max-width: 60%;
+}
+
+.carousel-caption h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+  opacity: 0.9;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.carousel-nav:hover {
+  background: rgba(255,255,255,0.35);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev { left: 20px; }
+.carousel-nav.next { right: 20px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255,255,255,0.6);
+}
+
+.carousel-dot.active {
+  background: white;
+  width: 28px;
+  border-radius: 5px;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -107,8 +219,10 @@ header.header {
   padding: 16px 32px;
   background: var(--bg);
   border-bottom: 2px solid var(--border);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   backdrop-filter: blur(8px);
   animation: slideDown 0.6s ease-out;
@@ -132,7 +246,6 @@ header.header {
   color: var(--text);
 }
 
-/* SETTINGS TAB */
 .settings-wrapper {
   position: relative;
 }
@@ -322,7 +435,6 @@ h1 {
   max-width: 1100px;
   margin: 0 auto;
   padding: 40px 20px;
-  padding-top: calc(var(--header-height) + 40px);
   position: relative;
   z-index: 1;
 }
@@ -460,7 +572,6 @@ footer {
   opacity: 0.7;
 }
 
-/* ADMIN MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -529,12 +640,16 @@ footer {
   header.header { padding: 12px 20px; }
   .welcome-text { font-size: 2.5rem; }
   .settings-dropdown { right: -16px; }
+  .hero-carousel { height: 300px; }
+  .carousel-caption { left: 20px; bottom: 20px; max-width: 80%; }
+  .carousel-caption h3 { font-size: 1.4rem; }
+  .carousel-caption p { font-size: 0.85rem; }
+  .carousel-nav { width: 40px; height: 40px; font-size: 1.2rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- WELCOME ANIMATION -->
 <div id="welcomeOverlay">
   <div class="welcome-text">Hi there!</div>
   <div class="welcome-sub">Welcome to File Hub</div>
@@ -576,6 +691,35 @@ footer {
   </div>
 </header>
 
+<div class="hero-carousel">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&h=900&fit=crop" alt="Team Work">
+      <div class="carousel-caption">
+        <h3>MCGI Youth Media Team</h3>
+        <p>Serving through creative excellence</p>
+      </div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1600&h=900&fit=crop" alt="Design Work">
+      <div class="carousel-caption">
+        <h3>Design Resources</h3>
+        <p>Access brand assets, templates, and more</p>
+      </div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&h=900&fit=crop" alt="Collaboration">
+      <div class="carousel-caption">
+        <h3>Editor's Central Hub</h3>
+        <p>Track projects and share materials seamlessly</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
+  <button class="carousel-nav next" onclick="moveCarousel(1)">›</button>
+  <div class="carousel-dots" id="carouselDots"></div>
+</div>
+
 <div class="container">
   <h1>MCGI Youth Palawan Editor's Central File Hub</h1>
   <p class="subtitle">by Nimref Gabriel IV | Provincial Editor</p>
@@ -587,7 +731,6 @@ footer {
 
   <div class="folder-tree" id="folderTree">
     
-    <!-- MY DRIVE - ONLY VISIBLE TO ADMIN -->
     <div class="folder" id="myDriveFolder" style="display:none;">
       <div class="folder-header">
         <span class="folder-icon">▶</span>
@@ -631,6 +774,7 @@ footer {
               <span class="file-icon">📁</span> Any designs for future upload
             </a>
           </div>
+        </div>
         <div class="folder">
           <div class="folder-header">
             <span class="folder-icon">▶</span>
@@ -668,7 +812,7 @@ footer {
 
   <div class="info-box">
     <h3>How to use</h3>
-    <p>Click any folder to expand. Click a subfolder to open the Google Drive link directly. For editors: make sure your Drive folders are set to "Anyone with the link can view" or "Editor" based on access needs. Eme. </p>
+    <p>Click any folder to expand. Click a subfolder to open the Google Drive link directly. Make sure your account have access to Google Drive, contact admin to grant access.</p>
   </div>
 </div>
 
@@ -676,7 +820,6 @@ footer {
   <p>© 2026 MCGI Youth Palawan | Built for Provincial, City/Municipal Editors & Media-Tech Teams</p>
 </footer>
 
-<!-- ADMIN MODAL -->
 <div class="modal" id="adminModal">
   <div class="modal-content">
     <h3>Admin Sign In</h3>
@@ -689,25 +832,20 @@ footer {
 </div>
 
 <script>
-// CONFIG
 const ADMIN_PASSWORD = 'welcomenoobcoder';
 
-// APPLY SAVED SETTINGS ON LOAD
 function applySettings() {
-  // Dark mode
   const isDark = localStorage.getItem('theme') === 'dark';
   if (isDark) {
     document.documentElement.setAttribute('data-theme', 'dark');
     document.getElementById('darkModeToggle').classList.add('active');
   }
   
-  // Text size
   const textSize = localStorage.getItem('textSize') || '5';
   document.documentElement.style.setProperty('--text-scale', textSize / 5);
   document.getElementById('textSizeSlider').value = textSize;
   document.getElementById('textSizeValue').textContent = textSize;
   
-  // Admin status
   const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
   if (isAdmin) {
     document.getElementById('myDriveFolder').style.display = 'block';
@@ -716,7 +854,6 @@ function applySettings() {
   }
 }
 
-// Play tone on welcome
 function playWelcomeTone() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -733,7 +870,6 @@ function playWelcomeTone() {
   } catch(e) {}
 }
 
-// Remove welcome animation after 2.4s or if already visited
 if (sessionStorage.getItem('welcomed')) {
   document.getElementById('welcomeOverlay').style.display = 'none';
 } else {
@@ -744,7 +880,60 @@ if (sessionStorage.getItem('welcomed')) {
   }, 2400);
 }
 
-// Settings dropdown toggle
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const totalSlides = slides.length;
+const track = document.getElementById('carouselTrack');
+const dotsContainer = document.getElementById('carouselDots');
+let autoSlideInterval;
+
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'carousel-dot';
+  if (i === 0) dot.classList.add('active');
+  dot.onclick = () => goToSlide(i);
+  dotsContainer.appendChild(dot);
+}
+
+function updateCarousel() {
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function moveCarousel(direction) {
+  currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+  updateCarousel();
+  resetAutoSlide();
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  updateCarousel();
+  resetAutoSlide();
+}
+
+function startAutoSlide() {
+  autoSlideInterval = setInterval(() => {
+    moveCarousel(1);
+  }, 3000);
+}
+
+function resetAutoSlide() {
+  clearInterval(autoSlideInterval);
+  startAutoSlide();
+}
+
+startAutoSlide();
+
+document.querySelector('.hero-carousel').addEventListener('mouseenter', () => {
+  clearInterval(autoSlideInterval);
+});
+document.querySelector('.hero-carousel').addEventListener('mouseleave', () => {
+  startAutoSlide();
+});
+
 document.getElementById('settingsBtn').addEventListener('click', (e) => {
   e.stopPropagation();
   document.getElementById('settingsDropdown').classList.toggle('open');
@@ -758,7 +947,6 @@ document.getElementById('settingsDropdown').addEventListener('click', (e) => {
   e.stopPropagation();
 });
 
-// Dark mode toggle
 function toggleDarkMode() {
   const toggle = document.getElementById('darkModeToggle');
   const isActive = toggle.classList.toggle('active');
@@ -771,14 +959,12 @@ function toggleDarkMode() {
   }
 }
 
-// Text size change
 function changeTextSize(value) {
   document.documentElement.style.setProperty('--text-scale', value / 5);
   document.getElementById('textSizeValue').textContent = value;
   localStorage.setItem('textSize', value);
 }
 
-// Admin functions
 function handleAdminClick() {
   const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
   if (isAdmin) {
@@ -810,7 +996,6 @@ document.getElementById('adminPassword').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') checkAdmin();
 });
 
-// Folder toggle
 document.querySelectorAll('.folder-header').forEach(header => {
   header.addEventListener('click', () => {
     const content = header.nextElementSibling;
@@ -826,7 +1011,6 @@ document.querySelectorAll('.folder-header').forEach(header => {
   });
 });
 
-// Cross-page search index
 const pageIndex = [
   {
     page: 'swatches.html',
@@ -840,7 +1024,6 @@ const pageIndex = [
   }
 ];
 
-// Search with admin check + cross-page
 const searchInput = document.getElementById('searchInput');
 const searchResultsDiv = document.getElementById('searchResults');
 const isAdmin = localStorage.getItem('mcgiAdmin') === 'true';
@@ -850,9 +1033,7 @@ searchInput.addEventListener('input', (e) => {
   const allFolders = document.querySelectorAll('.folder');
   let hasLocalResults = false;
   
-  // Local folder search
   allFolders.forEach(folder => {
-    // Skip admin-only folders if not admin - THIS IS THE FIX
     if (folder.id === 'myDriveFolder' && !isAdmin) {
       folder.style.display = 'none';
       return;
@@ -871,7 +1052,6 @@ searchInput.addEventListener('input', (e) => {
     }
   });
   
-  // Cross-page search
   if (searchTerm.length > 1) {
     const pageMatches = pageIndex.filter(p => 
       p.title.toLowerCase().includes(searchTerm) || 
@@ -897,7 +1077,6 @@ searchInput.addEventListener('input', (e) => {
     searchResultsDiv.style.display = 'none';
   }
   
-  // Hide folder tree if no local results but has page results
   if (!hasLocalResults && searchTerm.length > 1 && searchResultsDiv.style.display === 'block') {
     document.getElementById('folderTree').style.display = 'none';
   } else {
@@ -905,7 +1084,6 @@ searchInput.addEventListener('input', (e) => {
   }
 });
 
-// Init
 applySettings();
 </script>
 </body>
