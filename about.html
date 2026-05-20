@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - MCGI Youth Palawan File Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F1F1F1;
+  --card-bg: #FFFFFF;
+  --text: #3A6B7A;
+  --accent-orange: #FF8C00;
+  --border: #E5E5E5;
+  --text-scale: 1;
+}
+[data-theme="dark"] {
+  --bg: #1A1A1A;
+  --card-bg: #2A2A2A;
+  --text: #E0E0E0;
+  --border: #404040;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: calc(16px * var(--text-scale)); }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  padding: 40px 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  padding: 48px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 32px 0 16px;
+  color: var(--accent-orange);
+}
+p {
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 32px;
+  padding: 10px 20px;
+  background: var(--accent-orange);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.back-link:hover {
+  background: #e67e00;
+}
+ul {
+  margin: 16px 0 16px 24px;
+}
+li {
+  margin-bottom: 8px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link">← Back to File Hub</a>
+  
+  <h1>About This Platform</h1>
+  
+  <p>The MCGI Youth Palawan Editor's Central File Hub is a centralized digital workspace developed to streamline creative operations for Provincial, City/Municipal Editors, and Media-Tech Teams.</p>
+
+  <h2>Purpose</h2>
+  <p>This platform was built to provide:</p>
+  <ul>
+    <li><strong>Easier Access to Editor's Materials</strong> — Brand assets, logos, fonts, and color swatches organized in one place for consistent design execution.</li>
+    <li><strong>Monitoring of Editor's Drafts & Ongoing Projects</strong> — A structured hub for tracking work-in-progress and collaborative files across all media teams.</li>
+    <li><strong>Standardized Resources</strong> — Ensuring all editors work with approved brand identity and reference materials.</li>
+  </ul>
+
+  <h2>File Security</h2>
+  <p>All files and folders linked from this hub are stored and managed through Google Drive. Access permissions, sharing controls, and file security are handled directly by Google Drive's infrastructure. This ensures that materials remain protected and are only viewable by authorized personnel based on your organization's Drive sharing settings.</p>
+
+  <h2>Feedback & Support</h2>
+  <p>If you have recommendations for platform updates, encounter any bugs, or need technical assistance, please contact the developer through his official account. Continuous improvement is prioritized to serve the media ministry effectively.</p>
+
+  <p style="margin-top:32px;opacity:0.7;font-size:0.9rem;">© 2026 MCGI Youth Palawan | Developed by Nimref Gabriel IV, Provincial Editor</p>
+</div>
+
+<script>
+// Apply saved settings
+const isDark = localStorage.getItem('theme') === 'dark';
+if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+const textSize = localStorage.getItem('textSize') || '5';
+document.documentElement.style.setProperty('--text-scale', textSize / 5);
+</script>
+</body>
+</html>
